@@ -297,12 +297,72 @@ require('lazy').setup({
   --
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
-
+  -- Using Lazy
+  {
+    'navarasu/onedark.nvim',
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require('onedark').setup {
+        style = 'dark',
+      }
+      -- Enable theme
+      require('onedark').load()
+    end,
+  },
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod', lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      -- Your DBUI configuration
+      vim.g.db_ui_use_nerd_fonts = 1
+    end,
+  },
+  { -- optional saghen/blink.cmp completion source
+    'saghen/blink.cmp',
+    opts = {
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        per_filetype = {
+          sql = { 'snippets', 'dadbod', 'buffer' },
+        },
+        -- add vim-dadbod-completion to your completion providers
+        providers = {
+          dadbod = { name = 'Dadbod', module = 'vim_dadbod_completion.blink' },
+        },
+      },
+    },
+  },
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+      'MunifTanjim/nui.nvim',
+      -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    lazy = false, -- neo-tree will lazily load itself
+    ---@module "neo-tree"
+    ---@type neotree.Config?
+    opts = {
+      -- fill any relevant options here
+      vim.keymap.set('n', '<leader>e', '<Cmd>Neotree reveal<CR>'),
+    },
+  },
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
-      -- delay between pressing a key and opening which-key (milliseconds)
+      -- delay between pressing a key ane opening which-key (milliseconds)
       -- this setting is independent of vim.o.timeoutlen
       delay = 0,
       icons = {
@@ -493,6 +553,7 @@ require('lazy').setup({
       'saghen/blink.cmp',
     },
     config = function()
+      vim.lsp.enable 'pyright'
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -1011,6 +1072,6 @@ require('lazy').setup({
     },
   },
 })
-
+require('onedark').load()
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
