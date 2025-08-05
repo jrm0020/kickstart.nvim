@@ -310,6 +310,40 @@ require('lazy').setup({
     end,
   },
   {
+    'akinsho/toggleterm.nvim',
+    version = '*',
+    config = function()
+      require('toggleterm').setup {
+        open_mapping = [[<c-\>]],
+        direction = 'float',
+        float_opts = {
+          border = 'curved',
+          winblend = 0,
+        },
+        start_in_insert = true,
+        insert_mappings = true,
+        terminal_mappings = true,
+        persist_size = true,
+        persist_mode = true,
+        close_on_exit = true,
+        shell = vim.o.shell,
+      }
+
+      -- Optional: Define keymaps for different directions
+      vim.keymap.set('n', '<leader>tf', function()
+        require('toggleterm').toggle(1, nil, nil, 'float')
+      end, { desc = 'Toggle floating terminal' })
+
+      vim.keymap.set('n', '<leader>th', function()
+        require('toggleterm').toggle(2, nil, nil, 'horizontal')
+      end, { desc = 'Toggle horizontal terminal' })
+
+      vim.keymap.set('n', '<leader>tv', function()
+        require('toggleterm').toggle(3, nil, nil, 'vertical')
+      end, { desc = 'Toggle vertical terminal' })
+    end,
+  },
+  {
     'kristijanhusak/vim-dadbod-ui',
     dependencies = {
       { 'tpope/vim-dadbod', lazy = true },
