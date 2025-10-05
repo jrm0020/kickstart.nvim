@@ -814,6 +814,7 @@ require('lazy').setup({
         'black',
         'flake8',
         'pyright',
+        'yaml-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
