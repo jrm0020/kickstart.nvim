@@ -852,6 +852,9 @@ require('lazy').setup({
         'flake8',
         'pyright',
         'yaml-language-server',
+        'powershell-editor-services',
+        'sql-formatter',
+        'sqlls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
